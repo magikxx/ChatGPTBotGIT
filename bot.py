@@ -37,7 +37,7 @@ def callback_query(call):
                      '\nExample:'
                      '\n/code How to write a function in python'
                      '\nHow are you ?\n'
-                     '\nAttetion, code_davinci-002 in beta stage, and have low rate limit, which causing no response and bot shutdown')
+                     '\nAttention, code_davinci-002 in beta stage, and have low rate limit, which causing no response and bot shutdown')
     elif call.data == "cb_ukrainian":
         bot.send_message(call.message.chat.id, "Привіт! Я ChatGPT telegram бот\n" 'Я використовую модель відповідей GPT-3.5\n' 
                          '\nЗагальні питання обробляються моделью text-davinci-003\n'
