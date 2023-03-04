@@ -13,7 +13,7 @@ bot = telebot.TeleBot(BOT_TOKEN)
 general_engine = "text-davinci-003"
 code_engine = "code-davinci-002"
 max_tokens = 1024
-temperature = 0.2
+temperature = 0.7
 
 chat_id = 442525356
 
@@ -32,41 +32,43 @@ def message_handler(message):
 def callback_query(call):
     if call.data == "cb_english":
         bot.send_message(call.message.chat.id, 'Hello! Im ChatGPT telegram bot\n' 'Im using GPT-3.5 engine\n'
-                     '\nFor general purpose questions please, select general mode, which using text-davinci-003 model\n'
-                     '\nFor coding questions select code mode, which using code-davinci-002 model\n'
+                     '\nGeneral model is text-davinci-003 model\n'
+                     '\nFor coding optimize add /code to your question, this will provide you an code-optimized answer, using code-davinci-002 model\n'
                      '\nExample:'
                      '\n/code How to write a function in python'
-                     '\n/general How are you >')
+                     '\nHow are you ?\n'
+                     '\nAttetion, code_davinci-002 in beta stage, and have low rate limit, which causing no response and bot shutdown')
     elif call.data == "cb_ukrainian":
         bot.send_message(call.message.chat.id, "Привіт! Я ChatGPT telegram бот\n" 'Я використовую модель відповідей GPT-3.5\n' 
-                         '\nДля звичайних питань, обирай загальну модель повеіднки, що використовує модель text-davinci-003 model\n'
-                         "\nДля питань, що пов'язані з кодом, обирай модель спрямовану на код, що використовує модель code-davinci-002 model\n"
+                         '\nЗагальні питання обробляються моделью text-davinci-003\n'
+                         "\nДля отримання код-оптимізованих відповідей, додайте до свого питання /code, це питання буде обробленне моделью code-davinci-002\n"
                          '\nНаприклад:'
                          '\n/code Як написати фукнції на python'
-                         '\n/general Як твої справи?')
+                         '\nЯк твої справи?\n'
+                         '\nУвага, code-davinci-002 знаходиться на стадії бета та має маленький rate limit, що може залишити Вас без відповіді та закрити бота:(')
         
-@bot.message_handler(commands=['general'], func=lambda message: True)
-def generate_text(message):
+@bot.message_handler(func=lambda message: True)
+def general_text(message):
     response = openai.Completion.create(
         engine=general_engine,
         prompt=message.text,
         max_tokens=max_tokens,
         temperature=temperature
 )
-    generated_text = response.choices[0].text
+    general_text = response.choices[0].text
 
-    bot.reply_to(message, generated_text)
+    bot.reply_to(message, general_text)
     
 @bot.message_handler(commands=['code'], func=lambda message: True)
-def generate_text(message):
+def code_text(message):
     response = openai.Completion.create(
         engine=code_engine,
         prompt=message.text,
         max_tokens=max_tokens,
         temperature=temperature
 )
-    generated_text = response.choices[0].text
+    code_text = response.choices[0].text
 
-    bot.reply_to(message, generated_text)
+    bot.reply_to(message, code_text)
 
 bot.polling()
